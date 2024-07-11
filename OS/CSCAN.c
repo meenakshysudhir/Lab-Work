@@ -7,6 +7,7 @@ int left[10], right[10];
 void sort(int array[], int n);
 int main(void)
 {
+    printf("CSCANF : \n");
     for (int i = 0; i < n; i++)
     {
         if (arr[i] < head)
