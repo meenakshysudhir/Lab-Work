@@ -18,10 +18,6 @@ int main(void)
             right[rc++] = arr[i];
         }
     }
-    // for (int i = 0; i < rc; i++)
-    // {
-    //     printf("%d\t", right[i]);
-    // }
     sort(left, lc);
     sort(right, rc);
 
