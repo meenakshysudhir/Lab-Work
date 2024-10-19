@@ -33,7 +33,7 @@ void addSymtab(char Label[100], int Locctr)
     strcpy(symtab[csymtab].label, Label);
     // strcpy(symtab[csymtab].locctr, Locctr);
     // symtab[csymtab].locctr = Locctr;
-    sprintf(symtab[csymtab].locctr, "%d", Locctr);
+    sprintf(symtab[csymtab].locctr, "%04X", Locctr);
     csymtab++;
 }
 
@@ -48,6 +48,10 @@ int checkOptable(char opcode[100])
     }
     return 0;
 }
+// int toHex(int preloc)
+// {
+//     if ()
+// }
 int main(void)
 {
     FILE *f1 = fopen("input.txt", "r");
@@ -67,14 +71,15 @@ int main(void)
     fclose(f3);
 
     char label[100], opcode[100], operand[100];
-    int locationctr;
+    int locationctr, prevLocationctr;
 
     fscanf(f1, "%s %s %s", label, opcode, operand);
     // printf("%s %s %s\n", label, opcode, operand);
     if (strcmp(opcode, "START") == 0)
     {
         locationctr = atoi(operand);
-        fprintf(f2, "%s\t%s\t%s\n", label, opcode, operand);
+        // int start = fpr
+        fprintf(f2, "%s\t%s\t%04X\n", label, opcode, locationctr);
         fscanf(f1, "%s %s %s", label, opcode, operand);
     }
     // printf("%s %s %s\n", label, opcode, operand);
@@ -94,6 +99,7 @@ int main(void)
                 addSymtab(label, locationctr);
             }
         }
+        prevLocationctr = locationctr;
         if (checkOptable(opcode) == 1)
         {
             locationctr += 3;
@@ -114,15 +120,17 @@ int main(void)
             }
             else if (strcmp(opcode, "RESW") == 0)
             {
-                locationctr += atoi(opcode) * 3;
+                locationctr += atoi(operand) * 3;
             }
             else
             {
                 printf("Error ! Invalid opcode\n");
             }
         }
-        fprintf(f2, "%s\t%s\t%s\n", label, opcode, operand);
-        fscanf(f1, "%s %s %s", label, opcode, operand);
+        // printf("%d", prevLocationctr);
+        // int prevLocationctr1 = toHex(prevLocationctr);
+        fprintf(f2, "%s\t\t%s\t\t%s\t\t%04X\n", label, opcode, operand, prevLocationctr);
+        fscanf(f1, "%s %s %s ", label, opcode, operand);
     }
     if (strcmp(opcode, "END") == 0)
     {
