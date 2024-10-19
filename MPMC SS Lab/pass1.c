@@ -31,8 +31,7 @@ int search_symtab(char Label[100])
 void addSymtab(char Label[100], int Locctr)
 {
     strcpy(symtab[csymtab].label, Label);
-    // strcpy(symtab[csymtab].locctr, Locctr);
-    // symtab[csymtab].locctr = Locctr;
+
     sprintf(symtab[csymtab].locctr, "%04X", Locctr);
     csymtab++;
 }
@@ -48,16 +47,14 @@ int checkOptable(char opcode[100])
     }
     return 0;
 }
-// int toHex(int preloc)
-// {
-//     if ()
-// }
+
 int main(void)
 {
     FILE *f1 = fopen("input.txt", "r");
     FILE *f2 = fopen("intermediate.txt", "w");
     FILE *f3 = fopen("optab.txt", "r");
     FILE *f4 = fopen("symtab.txt", "w");
+    FILE *f5 = fopen("length.txt", "w");
 
     char op[100];
     char mnemonic_code[100], mne[100];
@@ -71,22 +68,17 @@ int main(void)
     fclose(f3);
 
     char label[100], opcode[100], operand[100];
-    int locationctr, prevLocationctr;
-
+    int locationctr, prevLocationctr, startingAddress;
     fscanf(f1, "%s %s %s", label, opcode, operand);
-    // printf("%s %s %s\n", label, opcode, operand);
     if (strcmp(opcode, "START") == 0)
     {
         locationctr = atoi(operand);
-        // int start = fpr
+        startingAddress = atoi(operand);
         fprintf(f2, "%s\t%s\t%04X\n", label, opcode, locationctr);
         fscanf(f1, "%s %s %s", label, opcode, operand);
     }
-    // printf("%s %s %s\n", label, opcode, operand);
     while (strcmp(opcode, "END") != 0)
     {
-
-        // fprintf(f4, "%s\t%s\t%s\n", label, opcode, operand);
 
         if (strcmp(label, "_") != 0)
         {
@@ -127,8 +119,7 @@ int main(void)
                 printf("Error ! Invalid opcode\n");
             }
         }
-        // printf("%d", prevLocationctr);
-        // int prevLocationctr1 = toHex(prevLocationctr);
+
         fprintf(f2, "%s\t\t%s\t\t%s\t\t%04X\n", label, opcode, operand, prevLocationctr);
         fscanf(f1, "%s %s %s ", label, opcode, operand);
     }
@@ -141,4 +132,6 @@ int main(void)
     {
         fprintf(f4, "%s\t%s\n", symtab[i].label, symtab[i].locctr);
     }
+
+    fprintf(f5, "%06X", prevLocationctr - startingAddress);
 }
