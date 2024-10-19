@@ -134,7 +134,7 @@ int main(void)
     }
     if (strcmp(opcode, "END") == 0)
     {
-        fprintf(f2, "%s %s", opcode, operand);
+        fprintf(f2, "%s %04X", opcode, atoi(operand));
         programLength = locationctr;
     }
     for (int i = 0; i < csymtab; i++)
