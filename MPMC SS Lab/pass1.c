@@ -69,18 +69,18 @@ int main(void)
 
     char label[100], opcode[100], operand[100];
     int locationctr, prevLocationctr, startingAddress;
-    fscanf(f1, "%s %s %s", label, opcode, operand);
+    fscanf(f1, "%s\t%s\t%s", label, opcode, operand);
     if (strcmp(opcode, "START") == 0)
     {
         locationctr = atoi(operand);
         startingAddress = atoi(operand);
-        fprintf(f2, "%s\t%s\t%04X\n", label, opcode, locationctr);
-        fscanf(f1, "%s %s %s", label, opcode, operand);
+        fprintf(f2, "%s %s %04X *\n", label, opcode, locationctr);
+        fscanf(f1, "%s %s %s ", label, opcode, operand);
     }
     while (strcmp(opcode, "END") != 0)
     {
 
-        if (strcmp(label, "_") != 0)
+        if (strcmp(label, "*") != 0)
         {
             if (search_symtab(label) == 1)
             {
@@ -120,18 +120,18 @@ int main(void)
             }
         }
 
-        fprintf(f2, "%s\t\t%s\t\t%s\t\t%04X\n", label, opcode, operand, prevLocationctr);
+        fprintf(f2, "%s %s %s %04X\n", label, opcode, operand, prevLocationctr);
         fscanf(f1, "%s %s %s ", label, opcode, operand);
     }
     if (strcmp(opcode, "END") == 0)
     {
-        fprintf(f2, "%s %04X", opcode, atoi(operand));
+        fprintf(f2, "* %s %04X", opcode, atoi(operand));
         programLength = locationctr;
     }
     for (int i = 0; i < csymtab; i++)
     {
-        fprintf(f4, "%s\t%s\n", symtab[i].label, symtab[i].locctr);
+        fprintf(f4, "%s %s\n", symtab[i].label, symtab[i].locctr);
     }
 
-    fprintf(f5, "%06X", prevLocationctr - startingAddress);
+    fprintf(f5, "%06X %06X", prevLocationctr - startingAddress, startingAddress);
 }
