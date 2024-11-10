@@ -101,19 +101,7 @@ int main(void)
             if (strcmp(opcode, "WORD") == 0)
             {
                 locationctr += 3;
-                if (strlen(operand) < 4)
-                {
-                    char temp[100];
-                    strcpy(temp, operand);
-                    strcpy(operand, "");
-                    int rest = 4 - strlen(temp);
-                    for (int i = 0; i < rest; i++)
-                    {
-                        strcat(operand, "0");
-                    }
-                    strcat(operand, temp);
-                }
-            }
+                           }
             else if (strcmp(opcode, "BYTE") == 0)
             {
                 locationctr++;
