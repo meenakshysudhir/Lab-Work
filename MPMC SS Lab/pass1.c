@@ -133,5 +133,5 @@ int main(void)
         fprintf(f4, "%s %s\n", symtab[i].label, symtab[i].locctr);
     }
 
-    fprintf(f5, "%04X %04X", prevLocationctr - startingAddress, startingAddress);
+    fprintf(f5, "%06X %06X", prevLocationctr - startingAddress, startingAddress);
 }
