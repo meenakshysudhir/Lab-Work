@@ -79,6 +79,7 @@ int main(void)
     char label[100], opcode[100], operand[100], locctr[100], length[100], startingAddress[100];
     char progName[100], mnemonic[100], opAddress[100], rec[100];
     fscanf(f4, "%s %s", length, startingAddress);
+    // printf("%s", startingAddress);
     fscanf(f1, "%s\t%s\t%s\t%s", label, opcode, locctr, operand);
     fprintf(f6, "%s\t%s\t%s\t%s\n", locctr, label, opcode, operand);
     if (strlen(label) > 6)
@@ -103,7 +104,7 @@ int main(void)
     int toCheck;
     while (strcmp(opcode, "END") != 0)
     {
-        strcpy(rec,"");
+        strcpy(rec, "");
         int toCheck = searchOptab(opcode);
         if (toCheck != -1) // Opcode present in Optab
         {
@@ -111,7 +112,7 @@ int main(void)
             int ind = searchSymtab(operand);
             if (ind != -1)
             {
-                printf("%s\n",symtab[ind].label);
+                // printf("%s\n", symtab[ind].label);
                 strcpy(opAddress, symtab[ind].locctr);
             }
             else
@@ -129,11 +130,11 @@ int main(void)
         {
             if (!strcmp(opcode, "WORD") || !strcmp(opcode, "BYTE"))
             {
-              //  strcpy(opAddress, operand);
+                //  strcpy(opAddress, operand);
                 if (strlen(operand) < 6)
                 {
-                    //char temp[100];
-                    //strcpy(temp, operand);
+                    // char temp[100];
+                    // strcpy(temp, operand);
                     strcpy(opAddress, "");
                     int rest = 6 - strlen(operand);
                     for (int i = 0; i < rest; i++)
@@ -142,8 +143,7 @@ int main(void)
                     }
                     strcat(opAddress, operand);
                 }
-                strcpy(rec,opAddress);
-            
+                strcpy(rec, opAddress);
             }
             else if (!strcmp(opcode, "RESW") || !strcmp(opcode, "RESB"))
             {
@@ -154,31 +154,30 @@ int main(void)
                 printf("Error ! Invalid Opcode\n");
             }
         }
-        if(txtrec < 10)
-        { 
-            if(strcmp(rec,"_") != 0)
-            {
-                strcat(fullrec,rec);
-                strcat(fullrec,"^");
-                txtrec++;
-
-            }
-       }
-        if(txtrec == 10)
+        if (txtrec < 10)
         {
-            long len = atoi(startingAddress) - atoi(startingAddress);
-            fprintf(f5,"T^%s^%ld^%s\n",startingAddress,len,fullrec);
+            if (strcmp(rec, "_") != 0)
+            {
+                strcat(fullrec, rec);
+                strcat(fullrec, "^");
+                txtrec++;
+            }
+        }
+        if (txtrec == 10)
+        {
+            int len = 10 * 6 / 2;
+            fprintf(f5, "T^%s^%02X^%s\n", startingAddress, len, fullrec);
             txtrec = 0;
-            strcpy(fullrec,"");
+            strcpy(fullrec, "");
         }
         fprintf(f6, "%s\t%s\t%s\t%s\t%s\n", locctr, label, opcode, operand, rec);
         fscanf(f1, "%s\t%s\t%s\t%s", label, opcode, operand, locctr);
+        // printf("%s\t", locctr);
     }
-    if(strcmp(fullrec,"") != 0)
+    if (strcmp(fullrec, "") != 0)
     {
-        long len = atoi(startingAddress) - atoi(startingAddress);
-        fprintf(f5,"T^%s^%ld^%s\n",startingAddress,len,fullrec);
+        int len = txtrec * 6 / 2;
+        fprintf(f5, "T^%s^%02X^%s\n", startingAddress, len, fullrec);
+        // fprintf(f5, "T^%s^%s\n", startingAddress, fullrec);
     }
-               
-
 }
